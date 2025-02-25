@@ -87,8 +87,8 @@ calc_design_patterns/
 
 ### 1️⃣ **Clone the repository**:
 ```bash
-git clone <repository_url>
-cd calc_design_patterns
+git clone https://github.com/Venkatasaikumarkethala/homework5
+cd homework5
 ```
 
 ### 2️⃣ **Create & Activate a virtual environment**:
@@ -158,7 +158,36 @@ pytest --cov=app --cov-report=term-missing
 
 #### ✅ Expected Result:
 ```
----------- coverage: ...
+collected 26 items                                                                     
+
+tests/test_app.py::test_app_successful_add_repl PASSED                           [  3%]
+tests/test_app.py::test_app_command_returns_none PASSED                          [  7%]
+tests/test_app.py::test_app_value_error_invalid_numeric_repl PASSED              [ 11%]
+tests/test_app.py::test_app_value_error_add_args_repl PASSED                     [ 15%]
+tests/test_app.py::test_app_value_error_divide_by_zero_repl PASSED               [ 19%]
+tests/test_app.py::test_app_unexpected_exception PASSED                          [ 23%]
+tests/test_app.py::test_app_start_exit PASSED                                    [ 26%]
+tests/test_app.py::test_app_blank_input PASSED                                   [ 30%]
+tests/test_app.py::test_app_start_unknown_command PASSED                         [ 34%]
+tests/test_command_interface.py::test_command_interface_cannot_instantiate PASSED [ 38%]
+tests/test_commands.py::test_add_command_invalid_numeric PASSED                  [ 42%]
+tests/test_commands.py::test_subtract_command_invalid_numeric PASSED             [ 46%]
+tests/test_commands.py::test_multiply_command_invalid_numeric PASSED             [ 50%]
+tests/test_commands.py::test_menu_command_no_commands_loaded PASSED              [ 53%]
+tests/test_commands.py::test_add_command PASSED                                  [ 57%]
+tests/test_commands.py::test_add_command_invalid_args PASSED                     [ 61%]
+tests/test_commands.py::test_subtract_command PASSED                             [ 65%]
+tests/test_commands.py::test_subtract_command_invalid_args PASSED                [ 69%]
+tests/test_commands.py::test_multiply_command PASSED                             [ 73%]
+tests/test_commands.py::test_multiply_command_invalid_args PASSED                [ 76%]
+tests/test_commands.py::test_divide_command PASSED                               [ 80%]
+tests/test_commands.py::test_divide_command_by_zero PASSED                       [ 84%]
+tests/test_commands.py::test_divide_command_invalid_args PASSED                  [ 88%]
+tests/test_commands.py::test_divide_command_invalid_numeric PASSED               [ 92%]
+tests/test_commands.py::test_menu_command PASSED                                 [ 96%]
+tests/test_commands.py::test_menu_command_invalid_args PASSED                    [100%]
+
+---------- coverage: platform darwin, python 3.11.7-final-0 ----------
 Name                               Stmts   Miss  Cover   Missing
 ----------------------------------------------------------------
 app/__init__.py                       29      0   100%
@@ -172,6 +201,9 @@ app/commands/subtract_command.py      17      0   100%
 app/plugin_manager.py                 18      0   100%
 ----------------------------------------------------------------
 TOTAL                                142      0   100%
+
+
+================================== 26 passed in 0.10s ==================================
 ```
 
 ### 3️⃣ **Test Files**
