@@ -4,7 +4,7 @@ In this assignment, we transform a single-run calculator script into a **continu
 
 ---
 
-## Table of Contents
+## 📌 Table of Contents
 
 1. [Project Overview](#project-overview)  
 2. [Key Features](#key-features)  
@@ -14,45 +14,43 @@ In this assignment, we transform a single-run calculator script into a **continu
 6. [Commands & Usage](#commands--usage)  
 7. [Testing & Coverage](#testing--coverage)  
 8. [Design & Architecture](#design--architecture)  
-9. [References & Additional Info](#references--additional-info)
+9. [References & Additional Info](#references--additional-info)  
 
 ---
 
-## Project Overview
+## 🔍 Project Overview
 
 This project builds on a basic calculator (from Homework 4) and adds:
 
 - A **REPL (Read-Eval-Print Loop)** to continuously accept user commands.  
-- A **Command Pattern** design, allowing each calculator operation to be a separate “command” class.  
+- A **Command Pattern** design, allowing each calculator operation to be a separate "command" class.  
 - A **Plugin Architecture** that dynamically discovers and loads commands from a `commands` directory.  
 - **Exception handling** for various error cases (e.g., invalid input, zero-division).  
-- **Comprehensive tests** that provide near- or exactly **100%** coverage using `pytest` and `pytest-cov`.
+- **Comprehensive tests** that provide **100% test coverage** using `pytest` and `pytest-cov`.  
 
 ---
 
-## Key Features
+## ⭐ Key Features
 
-1. **Command Pattern**  
-   - Each operation (add, subtract, multiply, etc.) is in its own class implementing a shared interface (`CommandInterface`).
+### 🔹 **Command Pattern**
+- Each operation (`add`, `subtract`, `multiply`, etc.) is in its own class implementing a shared interface (`CommandInterface`).
 
-2. **Plugin Manager**  
-   - Dynamically loads any command plugin placed in the `app/commands/` folder.  
-   - Makes adding new commands (e.g., power, root) as simple as creating a new file with a command class.
+### 🔹 **Plugin Manager**
+- Dynamically loads any command plugin placed in the `app/commands/` folder.  
+- Adding new commands (e.g., `power`, `root`) is as simple as creating a new file with a command class.
 
-3. **Interactive REPL**  
-   - Runs continuously, prompting the user to enter commands.  
-   - Handles errors gracefully (e.g., unknown command, invalid input) without crashing.  
+### 🔹 **Interactive REPL**
+- Runs continuously, prompting the user to enter commands.
+- Handles errors gracefully (e.g., unknown command, invalid input) without crashing.  
 
-4. **Tests & 100% Coverage**  
-   - Unit tests for each command.  
-   - Integration tests for the REPL flow (via `capfd`, `monkeypatch`).  
-   - Achieves **100%** coverage after thorough testing of success paths, error paths, and edge cases.
+### 🔹 **Tests & 100% Coverage**
+- Unit tests for each command.  
+- Integration tests for the REPL flow (via `capfd`, `monkeypatch`).  
+- Achieves **100%** coverage by thoroughly testing success paths, error paths, and edge cases.  
 
 ---
 
-## Directory Structure
-
-A typical layout:
+## 📂 Directory Structure
 
 ```
 calc_design_patterns/
@@ -85,38 +83,36 @@ calc_design_patterns/
 
 ---
 
-## Installation & Setup
+## ⚙️ Installation & Setup
 
-1. **Clone the repository**:
-   ```bash
-   git clone url
-   cd calc_design_patterns
-   ```
+### 1️⃣ **Clone the repository**:
+```bash
+git clone <repository_url>
+cd calc_design_patterns
+```
 
-2. **Create & Activate a virtual environment**:
-   ```bash
-   python -m venv hw5
-   source hw5/bin/activate       # Mac/Linux
-   hw5\Scripts\activate          # Windows
-   ```
+### 2️⃣ **Create & Activate a virtual environment**:
+```bash
+python -m venv hw5
+source hw5/bin/activate   # Mac/Linux
+hw5\Scripts\activate     # Windows
+```
 
-3. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 3️⃣ **Install dependencies**:
+```bash
+pip install -r requirements.txt
+```
 
 ---
 
-## How to Run
+## ▶️ How to Run
 
 From the project root directory:
-
 ```bash
 python main.py
 ```
 
-You’ll see:
-
+You'll see:
 ```
 Welcome to the Interactive Calculator!
 Type 'menu' to see available commands or 'exit' to quit.
@@ -127,57 +123,42 @@ Enter commands (e.g., `add 5 3`), or type `exit` to terminate.
 
 ---
 
-## Commands & Usage
+## 🔢 Commands & Usage
 
-Here are the built-in commands:
+### 📌 Built-in Commands
 
-1. **add**  
-   - **Usage**: `add <num1> <num2>`  
-   - **Example**: `add 5 3` → `5 + 3 = 8`
+| Command   | Usage                  | Example           |
+|-----------|------------------------|-------------------|
+| **add**   | `add <num1> <num2>`    | `add 5 3` → `8`  |
+| **subtract** | `subtract <num1> <num2>` | `subtract 8 2` → `6` |
+| **multiply** | `multiply <num1> <num2>` | `multiply 4 5` → `20` |
+| **divide** | `divide <num1> <num2>` | `divide 20 4` → `5` |
+| **menu**  | Lists all available commands. | `menu` |
+| **exit**  | Exits the REPL. | `exit` |
 
-2. **subtract**  
-   - **Usage**: `subtract <num1> <num2>`  
-   - **Example**: `subtract 8 2` → `8 - 2 = 6`
-
-3. **multiply**  
-   - **Usage**: `multiply <num1> <num2>`  
-   - **Example**: `multiply 4 5` → `4 * 5 = 20`
-
-4. **divide**  
-   - **Usage**: `divide <num1> <num2>`  
-   - **Example**: `divide 20 4` → `20 / 4 = 5`
-
-5. **menu** (Bonus)  
-   - Lists all available commands.  
-   - **Usage**: `menu`
-
-6. **exit**  
-   - Exits the REPL.
-
-**Error cases**:
-- **Divide by zero** → `Error: Cannot divide by zero.`  
-- **Invalid numeric input** → `Error: Invalid numeric input for ___ command.`  
-- **Unknown command** → `Unknown command. Type 'menu' to see available commands, or 'exit' to quit.`  
+### ⚠️ **Error Cases**
+- **Divide by zero** → `Error: Cannot divide by zero.`
+- **Invalid numeric input** → `Error: Invalid numeric input for ___ command.`
+- **Unknown command** → `Unknown command. Type 'menu' to see available commands, or 'exit' to quit.`
 - **Wrong number of arguments** → `Error: Usage: <command> <num1> <num2>`
 
 ---
 
-## Testing & Coverage
+## ✅ Testing & Coverage
 
-1. **Run all tests**:
-   ```bash
-   pytest
-   ```
-   This discovers and runs tests in the `tests/` folder.
+### 1️⃣ **Run all tests**:
+```bash
+pytest
+```
 
-2. **Run coverage**:
-   ```bash
-   pytest --cov=app --cov-report=term-missing
-   ```
-   Displays which lines are covered or missing coverage.  
-   Expected result:
-   ```
-   ---------- coverage: ...
+### 2️⃣ **Run coverage**:
+```bash
+pytest --cov=app --cov-report=term-missing
+```
+
+#### ✅ Expected Result:
+```
+---------- coverage: ...
 Name                               Stmts   Miss  Cover   Missing
 ----------------------------------------------------------------
 app/__init__.py                       29      0   100%
@@ -191,40 +172,26 @@ app/commands/subtract_command.py      17      0   100%
 app/plugin_manager.py                 18      0   100%
 ----------------------------------------------------------------
 TOTAL                                142      0   100%
-   ```
+```
 
-3. **Test files**:
-   - **`test_app.py`** → REPL-level tests (monkeypatched user inputs).
-   - **`test_commands.py`** → Command class tests (AddCommand, etc.).
-   - **`test_command_interface.py`** → Ensures the abstract base class can’t be instantiated.
-
----
-
-## Design & Architecture
-
-1. **Command Pattern**  
-   - Each calculator operation is a class implementing `CommandInterface`.  
-   - The REPL queries a `commands_dict` for a matching command name, instantiates it, and calls `.execute()`.
-
-2. **Plugin Architecture**  
-   - `PluginManager` scans `app/commands/` submodules.  
-   - Any new `.py` file that defines a `CommandInterface` subclass is automatically discovered.
-
-3. **REPL**  
-   - Continuously reads user input, splits into `<command> <args>`.  
-   - If valid, calls the appropriate command; otherwise shows an error.  
-   - Exceptions from commands are caught and printed gracefully.
-
-4. **Exception Handling**  
-   - `ValueError` for known invalid conditions (e.g., “Usage,” “Cannot divide by zero,” “Invalid numeric input”).  
-   - `Exception` catch-all to handle truly unexpected errors with `Unexpected error: ...`.
+### 3️⃣ **Test Files**
+- `test_app.py` → REPL-level tests (monkeypatched user inputs).
+- `test_commands.py` → Command class tests (`AddCommand`, etc.).
+- `test_command_interface.py` → Ensures the abstract base class can’t be instantiated.
 
 ---
 
-## References & Additional Info
+## 🎨 Design & Architecture
 
-- **Pytest**: [https://docs.pytest.org/](https://docs.pytest.org/)  
-- **Pytest-Cov**: [https://pytest-cov.readthedocs.io/](https://pytest-cov.readthedocs.io/)  
-- **Faker** (optional) for generating test data: [https://faker.readthedocs.io/](https://faker.readthedocs.io/)  
-- **Design Patterns**: [Gamma et al., *Design Patterns* (1994)](https://en.wikipedia.org/wiki/Design_Patterns)  
-- **GIL & Multiprocessing** (bonus lecture): [YouTube Video](https://www.youtube.com/watch?v=m4zDBk0zAUY)
+- **Command Pattern** → Each calculator operation is a class implementing `CommandInterface`.
+- **Plugin Architecture** → `PluginManager` scans `app/commands/` submodules for new commands.
+- **REPL** → Continuously reads user input and executes the appropriate command.
+- **Exception Handling** → Handles errors gracefully.
+
+---
+
+## 📚 References & Additional Info
+
+- **[Pytest Docs](https://docs.pytest.org/)**  
+- **[Pytest-Cov](https://pytest-cov.readthedocs.io/)**  
+- **[Design Patterns - Gamma et al.](https://en.wikipedia.org/wiki/Design_Patterns)**  
