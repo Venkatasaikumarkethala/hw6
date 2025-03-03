@@ -2,33 +2,32 @@
 App package initializer for Homework 6.
 Builds on Homework 5 by adding environment variables and logging.
 """
-import os  
-import logging  
-import logging.config  
-from dotenv import load_dotenv  
+import os
+import logging
+import logging.config
+from dotenv import load_dotenv
 from .plugin_manager import PluginManager
 
 class App:
     """Main Application class implementing a REPL that uses the command pattern,
        plus environment variables and logging."""
     
-    def __init__(self):  
+    def __init__(self):
+        # 1) Configure logs
         self.configure_logging()
         
-       
+        # 2) Load environment variables
         load_dotenv()
-        self.env_name = os.getenv("ENV_NAME", "unknown")  
+        self.env_name = os.getenv("ENV_NAME", "unknown")
         logging.info(f"Environment: {self.env_name}")
 
-
+        # 3) Dynamically load all commands
         self.commands_dict = PluginManager.load_plugins()
         logging.info("Plugin commands loaded.")
 
     def configure_logging(self):
         """Set up logging via logging.conf if available, else basic config."""
-
         os.makedirs('logs', exist_ok=True)
-
         if os.path.exists("logging.conf"):
             logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
             logging.info("Loaded logging configuration from logging.conf")
@@ -39,9 +38,8 @@ class App:
             )
             logging.info("Default logging configuration applied.")
 
-
     def start(self) -> None:
-        logging.info("Starting the Interactive Calculator REPL...")  
+        logging.info("Starting the Interactive Calculator REPL...")
         print("Welcome to the Interactive Calculator!")
         print("Type 'menu' to see available commands or 'exit' to quit.\n")
 
@@ -67,10 +65,10 @@ class App:
                     if output is not None:
                         print(output)
                 except ValueError as exc:
-                    logging.error(f"ValueError in command '{command_name}': {exc}")  
+                    logging.error(f"ValueError in command '{command_name}': {exc}")
                     print(f"Error: {exc}")
                 except Exception as exc:
-                    logging.exception(f"Unexpected error in command '{command_name}'.")  
+                    logging.exception(f"Unexpected error in command '{command_name}'.")
                     print(f"Unexpected error: {exc}")
             else:
                 logging.warning(f"Unknown command: {command_name}")

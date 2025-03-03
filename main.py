@@ -1,7 +1,8 @@
 """
-Entrypoint to start the interactive calculator application (HW5).
+Entrypoint to start the Interactive Calculator (HW6).
 """
 from app import App
 
 if __name__ == "__main__":
-    App.start()
+    application = App()  # We instantiate App
+    application.start()  # Then call start()
