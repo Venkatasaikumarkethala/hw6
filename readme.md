@@ -1,56 +1,52 @@
-# Homework 5: Command Pattern & Plugins
+# Homework 6: Getting Ready for Production
 
-In this assignment, we transform a single-run calculator script into a **continuously running application** with a **Command Pattern** and **Plugin Architecture**. We also achieve **100% test coverage** through comprehensive unit and functional tests.
+This project builds on **Homework 5** by adding:
 
----
+1. **GitHub Actions** for Continuous Integration (CI).  
+2. **Environment Variables** stored in a `.env` file for local development.  
+3. **Logging** to track application events and errors.
 
-## 📌 Table of Contents
+## Table of Contents
 
-1. [Project Overview](#project-overview)  
-2. [Key Features](#key-features)  
+1. [Introduction & Requirements](#introduction--requirements)  
+2. [Features Added in HW6](#features-added-in-hw6)  
 3. [Directory Structure](#directory-structure)  
-4. [Installation & Setup](#installation--setup)  
-5. [How to Run](#how-to-run)  
-6. [Commands & Usage](#commands--usage)  
-7. [Testing & Coverage](#testing--coverage)  
-8. [Design & Architecture](#design--architecture)  
-9. [References & Additional Info](#references--additional-info)  
+4. [Setup Instructions](#setup-instructions)  
+5. [Usage](#usage)  
+6. [Environment Variables](#environment-variables)  
+7. [Logging](#logging)  
+8. [Continuous Integration (GitHub Actions)](#continuous-integration-github-actions)  
+9. [Testing & Coverage](#testing--coverage)  
+10. [Conclusions](#conclusions)
 
 ---
 
-## 🔍 Project Overview
+## 1. Introduction & Requirements
 
-This project builds on a basic calculator (from Homework 4) and adds:
+**Goal**: Transform a previously built interactive calculator into a more **production-ready** application. We achieve this by:
 
-- A **REPL (Read-Eval-Print Loop)** to continuously accept user commands.  
-- A **Command Pattern** design, allowing each calculator operation to be a separate "command" class.  
-- A **Plugin Architecture** that dynamically discovers and loads commands from a `commands` directory.  
-- **Exception handling** for various error cases (e.g., invalid input, zero-division).  
-- **Comprehensive tests** that provide **100% test coverage** using `pytest` and `pytest-cov`.  
+1. **Storing configuration** (like environment name) in `.env`, **never** committing it to Git.  
+2. **Logging** events and errors to trace the program’s operation.  
+3. **Running automated tests** on GitHub automatically for every push, ensuring stable code.
 
----
+### Prerequisites
 
-## ⭐ Key Features
-
-### 🔹 **Command Pattern**
-- Each operation (`add`, `subtract`, `multiply`, etc.) is in its own class implementing a shared interface (`CommandInterface`).
-
-### 🔹 **Plugin Manager**
-- Dynamically loads any command plugin placed in the `app/commands/` folder.  
-- Adding new commands (e.g., `power`, `root`) is as simple as creating a new file with a command class.
-
-### 🔹 **Interactive REPL**
-- Runs continuously, prompting the user to enter commands.
-- Handles errors gracefully (e.g., unknown command, invalid input) without crashing.  
-
-### 🔹 **Tests & 100% Coverage**
-- Unit tests for each command.  
-- Integration tests for the REPL flow (via `capfd`, `monkeypatch`).  
-- Achieves **100%** coverage by thoroughly testing success paths, error paths, and edge cases.  
+- Python 3.10+  
+- Understanding of Git, GitHub, and Pytest.
 
 ---
 
-## 📂 Directory Structure
+## 2. Features Added in HW6
+
+1. **GitHub Actions**: Every push to `main` triggers the workflow in `.github/workflows/python-app.yml`, installing dependencies and running `pytest`.  
+2. **Environment Variables**: The file `.env` (excluded from Git via `.gitignore`) sets local dev environment variables (e.g., `ENV_NAME="local-development"`). On GitHub, the same variable is set in the Actions workflow for consistency.  
+3. **Logging**: A `logging.conf` file or `logging.basicConfig()` configures logging. We log at levels **INFO**, **WARNING**, **ERROR**, and **EXCEPTION**.
+
+---
+
+## 3. Directory Structure
+
+Below is an abbreviated layout:
 
 ```
 calc_design_patterns/
@@ -58,172 +54,171 @@ calc_design_patterns/
 │   └── workflows/
 │       └── python-app.yml
 ├── app/
-│   ├── __init__.py            # Contains the main REPL (App.start)
-│   ├── plugin_manager.py      # Dynamically loads command plugins
-│   ├── command_interface.py   # Abstract base for all commands
+│   ├── __init__.py          # Main application (logging, env loading, REPL)
+│   ├── plugin_manager.py    # Dynamically loads commands
 │   └── commands/
-│       ├── __init__.py
 │       ├── add_command.py
-│       ├── subtract_command.py
-│       ├── multiply_command.py
 │       ├── divide_command.py
-│       └── menu_command.py
+│       ├── menu_command.py
+│       ├── multiply_command.py
+│       ├── subtract_command.py
+│       └── __init__.py
 ├── tests/
-│   ├── test_app.py
+│   ├── test_app.py          # Integration tests for the REPL
+│   ├── test_commands.py     # Unit tests for each command
 │   ├── test_command_interface.py
-│   ├── test_commands.py
 │   └── conftest.py
-├── main.py
-├── pytest.ini
+├── main.py                  # Entry point calling `App()`
+├── logging.conf             # Optional logging config
+├── .env                     # Local dev environment variables (not committed)
+├── .gitignore
 ├── requirements.txt
-├── .coveragerc
-├── .pylintrc
+├── pytest.ini
 └── readme.md
 ```
 
----
-
-## ⚙️ Installation & Setup
-
-### 1️⃣ **Clone the repository**:
-```bash
-git clone https://github.com/Venkatasaikumarkethala/homework5
-cd homework5
-```
-
-### 2️⃣ **Create & Activate a virtual environment**:
-```bash
-python -m venv hw5
-source hw5/bin/activate   # Mac/Linux
-hw5\Scripts\activate     # Windows
-```
-
-### 3️⃣ **Install dependencies**:
-```bash
-pip install -r requirements.txt
-```
+**Note**: `.env` is **ignored** by Git, so it won’t appear on GitHub.
 
 ---
 
-## ▶️ How to Run
+## 4. Setup Instructions
 
-From the project root directory:
-```bash
-python main.py
-```
-
-You'll see:
-```
-Welcome to the Interactive Calculator!
-Type 'menu' to see available commands or 'exit' to quit.
->>>
-```
-
-Enter commands (e.g., `add 5 3`), or type `exit` to terminate.
-
----
-
-## 🔢 Commands & Usage
-
-### 📌 Built-in Commands
-
-| Command   | Usage                  | Example           |
-|-----------|------------------------|-------------------|
-| **add**   | `add <num1> <num2>`    | `add 5 3` → `8`  |
-| **subtract** | `subtract <num1> <num2>` | `subtract 8 2` → `6` |
-| **multiply** | `multiply <num1> <num2>` | `multiply 4 5` → `20` |
-| **divide** | `divide <num1> <num2>` | `divide 20 4` → `5` |
-| **menu**  | Lists all available commands. | `menu` |
-| **exit**  | Exits the REPL. | `exit` |
-
-### ⚠️ **Error Cases**
-- **Divide by zero** → `Error: Cannot divide by zero.`
-- **Invalid numeric input** → `Error: Invalid numeric input for ___ command.`
-- **Unknown command** → `Unknown command. Type 'menu' to see available commands, or 'exit' to quit.`
-- **Wrong number of arguments** → `Error: Usage: <command> <num1> <num2>`
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Venkatasaikumarkethala/hw6
+   cd hw6
+   ```
+2. **Create & activate a virtual environment**:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate      # Mac/Linux
+   venv\Scripts\activate         # Windows
+   ```
+3. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ---
 
-## ✅ Testing & Coverage
+## 5. Usage
 
-### 1️⃣ **Run all tests**:
-```bash
-pytest
-```
-
-### 2️⃣ **Run coverage**:
-```bash
-pytest --cov=app --cov-report=term-missing
-```
-
-#### ✅ Expected Result:
-```
-collected 26 items                                                                     
-
-tests/test_app.py::test_app_successful_add_repl PASSED                           [  3%]
-tests/test_app.py::test_app_command_returns_none PASSED                          [  7%]
-tests/test_app.py::test_app_value_error_invalid_numeric_repl PASSED              [ 11%]
-tests/test_app.py::test_app_value_error_add_args_repl PASSED                     [ 15%]
-tests/test_app.py::test_app_value_error_divide_by_zero_repl PASSED               [ 19%]
-tests/test_app.py::test_app_unexpected_exception PASSED                          [ 23%]
-tests/test_app.py::test_app_start_exit PASSED                                    [ 26%]
-tests/test_app.py::test_app_blank_input PASSED                                   [ 30%]
-tests/test_app.py::test_app_start_unknown_command PASSED                         [ 34%]
-tests/test_command_interface.py::test_command_interface_cannot_instantiate PASSED [ 38%]
-tests/test_commands.py::test_add_command_invalid_numeric PASSED                  [ 42%]
-tests/test_commands.py::test_subtract_command_invalid_numeric PASSED             [ 46%]
-tests/test_commands.py::test_multiply_command_invalid_numeric PASSED             [ 50%]
-tests/test_commands.py::test_menu_command_no_commands_loaded PASSED              [ 53%]
-tests/test_commands.py::test_add_command PASSED                                  [ 57%]
-tests/test_commands.py::test_add_command_invalid_args PASSED                     [ 61%]
-tests/test_commands.py::test_subtract_command PASSED                             [ 65%]
-tests/test_commands.py::test_subtract_command_invalid_args PASSED                [ 69%]
-tests/test_commands.py::test_multiply_command PASSED                             [ 73%]
-tests/test_commands.py::test_multiply_command_invalid_args PASSED                [ 76%]
-tests/test_commands.py::test_divide_command PASSED                               [ 80%]
-tests/test_commands.py::test_divide_command_by_zero PASSED                       [ 84%]
-tests/test_commands.py::test_divide_command_invalid_args PASSED                  [ 88%]
-tests/test_commands.py::test_divide_command_invalid_numeric PASSED               [ 92%]
-tests/test_commands.py::test_menu_command PASSED                                 [ 96%]
-tests/test_commands.py::test_menu_command_invalid_args PASSED                    [100%]
-
----------- coverage: platform darwin, python 3.11.7-final-0 ----------
-Name                               Stmts   Miss  Cover   Missing
-----------------------------------------------------------------
-app/__init__.py                       29      0   100%
-app/command_interface.py               6      0   100%
-app/commands/__init__.py               6      0   100%
-app/commands/add_command.py           17      0   100%
-app/commands/divide_command.py        19      0   100%
-app/commands/menu_command.py          13      0   100%
-app/commands/multiply_command.py      17      0   100%
-app/commands/subtract_command.py      17      0   100%
-app/plugin_manager.py                 18      0   100%
-----------------------------------------------------------------
-TOTAL                                142      0   100%
-
-
-================================== 26 passed in 0.10s ==================================
-```
-
-### 3️⃣ **Test Files**
-- `test_app.py` → REPL-level tests (monkeypatched user inputs).
-- `test_commands.py` → Command class tests (`AddCommand`, etc.).
-- `test_command_interface.py` → Ensures the abstract base class can’t be instantiated.
+1. **Add a local `.env` file** for environment variables (see below).  
+2. **Run**:
+   ```bash
+   python main.py
+   ```
+3. 
+   ```
+   Welcome to the Interactive Calculator!
+   Type 'menu' to see available commands or 'exit' to quit.
+   >>>
+   ```
+4. Example commands:
+   - `menu` → `Available commands: add, divide, menu, multiply, subtract`
+   - `add 5 6` → `5 + 6 = 11`
+   - `divide 5 0` → `Error: Cannot divide by zero.`
+   - `unknowncmd 1 2` → `Unknown command. Type 'menu'...`
+   - `exit` → Exits the program.
 
 ---
 
-## 🎨 Design & Architecture
+## 6. Environment Variables
 
-- **Command Pattern** → Each calculator operation is a class implementing `CommandInterface`.
-- **Plugin Architecture** → `PluginManager` scans `app/commands/` submodules for new commands.
-- **REPL** → Continuously reads user input and executes the appropriate command.
-- **Exception Handling** → Handles errors gracefully.
+- Create a **`.env`** file in the project root (not committed).  
+- Example:
+  ```bash
+  ENV_NAME="local-development"
+  LOG_LEVEL="INFO"
+  ```
+- The app code in `app/__init__.py` loads `.env` via `python-dotenv` and sets:
+  ```python
+  load_dotenv()
+  self.env_name = os.getenv("ENV_NAME", "unknown")
+  ```
+- The test `test_app.py::test_environment_loaded` ensures the environment variable is recognized.  
+- On GitHub, the `ENV_NAME` is set in `.github/workflows/python-app.yml` under `env:` so that test doesn’t fail.
 
 ---
 
-## 📚 References & Additional Info
+## 7. Logging
 
-- **[Pytest Docs](https://docs.pytest.org/)**  
-- **[Pytest-Cov](https://pytest-cov.readthedocs.io/)**  
-- **[Design Patterns - Gamma et al.](https://en.wikipedia.org/wiki/Design_Patterns)**  
+- **Default** logs go to the console.  
+- If `logging.conf` exists, a rotating file handler writes logs to `logs/app.log`.
+- Example logs:
+  ```
+  2025-03-03 21:12:38,972 - root - INFO - Environment: local-development
+  2025-03-03 21:12:38,972 - root - INFO - Plugin commands loaded.
+  2025-03-03 21:12:38,972 - root - WARNING - Unknown command: dicide
+  2025-03-03 21:12:56,212 - root - ERROR - ValueError in command 'add': Usage: add <num1> <num2>
+  ```
+
+---
+
+## 8. Continuous Integration (GitHub Actions)
+
+- `.github/workflows/python-app.yml` defines a **CI pipeline**:
+  ```yaml
+  name: Python application
+  on:
+    push:
+      branches: [ "main" ]
+    pull_request:
+      branches: [ "main" ]
+  env:
+    ENV_NAME: local-development
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - name: Set up Python 3.10
+          uses: actions/setup-python@v3
+          with:
+            python-version: "3.10"
+        - name: Install dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install flake8 pytest
+            if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        - name: Test with pytest --pylint
+          run: |
+            pytest
+  ```
+- Whenever changes are pushed to `main`, GitHub installs dependencies and runs tests.  
+- We set `ENV_NAME: local-development` so the environment test passes.
+
+---
+
+## 9. Testing & Coverage
+
+- **Run tests locally**:
+  ```bash
+  pytest --cov=app --cov-report=term-missing
+  ```
+- **Sample output**:
+  ```
+  =========================== test session starts ============================
+  collected 27 items
+  
+  tests/test_app.py::test_environment_loaded PASSED
+  ...
+  ---------- coverage: platform darwin, python 3.11 ----------
+  Name                Stmts   Miss  Cover
+  ---------------------------------------
+  app/__init__.py        50      0   100%
+  ...
+  TOTAL                163      0   100%
+  ```
+- On GitHub, check the “Actions” tab to see a similar log. A green check mark indicates all tests passed.
+
+---
+
+## 10. Conclusions
+
+With this Homework 6 submission, we have:
+
+- **Automatic CI** with GitHub Actions, verifying code on every commit.  
+- **Environment Variables** for local dev vs. production configuration.  
+- **Logging** for diagnostics, debugging, and future data insights.  
+- Maintained **100% coverage** from HW5 while adding DevOps features.
